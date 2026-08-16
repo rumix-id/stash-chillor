@@ -45,6 +45,7 @@ Clone this repository and install the required frontend dependencies:
 git clone [https://github.com/your-username/stash-chilorr.git](https://github.com/your-username/stash-chilorr.git)
 cd stash-chilorr
 npm install
+```
 ## 2. Running the Frontend (Development Mode)
 
 Start the Vite development server:
@@ -76,3 +77,5 @@ To create the final release version that end-users can run:
    - Attach the icon from the `/icon` folder.
    - Set the **Exe-Format** option to `64 Bit | Windows (Invisible)` to ensure it runs silently in the background.
    - Click **Convert** to generate your `Stash-Chillor.exe`.
+---
+Built with ❤️ by **Rumix Tools**
