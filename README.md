@@ -45,7 +45,7 @@ If you just want to run the application without messing with the source code, do
 Clone this repository and install the required frontend dependencies:
 
 ```bash
-git clone (https://github.com/rumix-id/stash-chillor.git)
+git clone https://github.com/rumix-id/stash-chillor.git
 cd stash-chilorr
 npm install
 ```
