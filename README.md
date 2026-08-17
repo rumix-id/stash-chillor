@@ -85,5 +85,6 @@ To create the final release version that end-users can run:
 ├── icon.ico
 ├── server.js
 └── Stash-Chillor.bat
+```
 ---
 Built with ❤️ by **Rumix Tools**
