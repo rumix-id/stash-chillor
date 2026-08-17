@@ -9,195 +9,290 @@ function getHeaders() {
 }
 
 export async function fetchScenes() {
-  const query = `
-    query {
-      findScenes {
-        scenes {
-          id
-          title
-          details
-          date
-          director
-          studio { id name }
-          tags { id name }
-          performers { id name image_path }
-          galleries { id title }
-          stash_ids { stash_id endpoint }
-          paths { screenshot stream preview webp } 
-          files {
-            path size mod_time duration width height
-            frame_rate bit_rate video_codec audio_codec
-            fingerprints { type value }
+  let allScenes = [];
+  let page = 1;
+  const perPage = 100;
+  let hasMore = true;
+
+  while (hasMore) {
+    const query = `
+      query {
+        findScenes(filter: { page: ${page}, per_page: ${perPage} }) {
+          scenes {
+            id
+            title
+            details
+            date
+            director
+            studio { id name }
+            tags { id name }
+            performers { id name image_path }
+            galleries { id title }
+            stash_ids { stash_id endpoint }
+            paths { screenshot stream preview webp } 
+            files {
+              path size mod_time duration width height
+              frame_rate bit_rate video_codec audio_codec
+              fingerprints { type value }
+            }
           }
         }
       }
-    }
-  `;
+    `;
 
-  try {
-    const response = await fetch(STASH_URL, {
-      method: "POST", 
-      headers: getHeaders(), 
-      body: JSON.stringify({ query }),
-    });
-    const result = await response.json();
-    return result.data?.findScenes?.scenes || [];
-  } catch (error) {
-    return [];
+    try {
+      const response = await fetch(STASH_URL, {
+        method: "POST", 
+        headers: getHeaders(), 
+        body: JSON.stringify({ query }),
+      });
+      const result = await response.json();
+      const items = result.data?.findScenes?.scenes || [];
+      
+      allScenes = [...allScenes, ...items];
+      
+      // Jika hasil yang didapat kurang dari 100, berarti ini halaman terakhir
+      if (items.length < perPage) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch (error) {
+      hasMore = false;
+    }
   }
+  return allScenes;
 }
 
 export async function fetchGalleries() {
-  const query = `
-    query {
-      findGalleries(filter: { per_page: -1 }) {
-        count
-        galleries {
-          id
-          title
-          image_count
-          paths { cover }
-          files { path }
-          folder { path } 
-        }
-      }
-    }
-  `;
+  let allGalleries = [];
+  let page = 1;
+  const perPage = 100;
+  let hasMore = true;
 
-  try {
-    const response = await fetch(STASH_URL, {
-      method: "POST", 
-      headers: getHeaders(), 
-      body: JSON.stringify({ query }),
-    });
-    const result = await response.json();
-    const galleries = result.data?.findGalleries?.galleries || [];
-
-    return galleries.map(g => {
-      let cleanTitle = g.title;
-      
-      if (!cleanTitle || cleanTitle.trim() === "" || cleanTitle.toLowerCase().startsWith("gallery #")) {
-        let pathToExtract = "";
-        
-        if (g.folder && g.folder.path) {
-          pathToExtract = g.folder.path;
-        } 
-        else if (g.files && g.files.length > 0 && g.files[0].path) {
-          pathToExtract = g.files[0].path;
-        }
-
-        if (pathToExtract) {
-          const parts = pathToExtract.split(/[/\\]/).filter(Boolean);
-          if (parts.length > 0) {
-            const lastPart = parts[parts.length - 1];
-            cleanTitle = lastPart.replace(/\.[^/.]+$/, ""); 
+  while (hasMore) {
+    const query = `
+      query {
+        findGalleries(filter: { page: ${page}, per_page: ${perPage} }) {
+          galleries {
+            id
+            title
+            image_count
+            paths { cover }
+            files { path }
+            folder { path } 
           }
         }
       }
+    `;
 
-      return {
-        ...g,
-        title: cleanTitle || `Gallery #${g.id}`
-      };
-    });
-  } catch (error) {
-    return [];
+    try {
+      const response = await fetch(STASH_URL, {
+        method: "POST", 
+        headers: getHeaders(), 
+        body: JSON.stringify({ query }),
+      });
+      const result = await response.json();
+      const items = result.data?.findGalleries?.galleries || [];
+      
+      allGalleries = [...allGalleries, ...items];
+      
+      if (items.length < perPage) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch (error) {
+      hasMore = false;
+    }
   }
+
+  return allGalleries.map(g => {
+    let cleanTitle = g.title;
+    
+    if (!cleanTitle || cleanTitle.trim() === "" || cleanTitle.toLowerCase().startsWith("gallery #")) {
+      let pathToExtract = "";
+      
+      if (g.folder && g.folder.path) {
+        pathToExtract = g.folder.path;
+      } 
+      else if (g.files && g.files.length > 0 && g.files[0].path) {
+        pathToExtract = g.files[0].path;
+      }
+
+      if (pathToExtract) {
+        const parts = pathToExtract.split(/[/\\]/).filter(Boolean);
+        if (parts.length > 0) {
+          const lastPart = parts[parts.length - 1];
+          cleanTitle = lastPart.replace(/\.[^/.]+$/, ""); 
+        }
+      }
+    }
+
+    return {
+      ...g,
+      title: cleanTitle || `Gallery #${g.id}`
+    };
+  });
 }
 
 export async function fetchGalleryImages(galleryId) {
-  const query = `
-    query {
-      findImages(image_filter: { galleries: { value: ["${galleryId}"], modifier: INCLUDES } }, filter: { per_page: -1 }) {
-        images {
-          id
-          title
-          paths {
-            thumbnail
-            image
+  let allImages = [];
+  let page = 1;
+  const perPage = 100;
+  let hasMore = true;
+
+  while (hasMore) {
+    const query = `
+      query {
+        findImages(image_filter: { galleries: { value: ["${galleryId}"], modifier: INCLUDES } }, filter: { page: ${page}, per_page: ${perPage} }) {
+          images {
+            id
+            title
+            paths {
+              thumbnail
+              image
+            }
           }
         }
       }
-    }
-  `;
+    `;
 
-  try {
-    const response = await fetch(STASH_URL, {
-      method: "POST", 
-      headers: getHeaders(), 
-      body: JSON.stringify({ query }),
-    });
-    const result = await response.json();
-    return result.data?.findImages?.images || [];
-  } catch (error) {
-    return [];
+    try {
+      const response = await fetch(STASH_URL, {
+        method: "POST", 
+        headers: getHeaders(), 
+        body: JSON.stringify({ query }),
+      });
+      const result = await response.json();
+      const items = result.data?.findImages?.images || [];
+      
+      allImages = [...allImages, ...items];
+      
+      if (items.length < perPage) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch (error) {
+      hasMore = false;
+    }
   }
+  return allImages;
 }
 
 export async function fetchStudios() {
-  const query = `
-    query {
-      findStudios(filter: { per_page: -1 }) {
-        studios { id name image_path scene_count }
+  let allStudios = [];
+  let page = 1;
+  const perPage = 100;
+  let hasMore = true;
+
+  while (hasMore) {
+    const query = `
+      query {
+        findStudios(filter: { page: ${page}, per_page: ${perPage} }) {
+          studios { id name image_path scene_count }
+        }
       }
+    `;
+    try {
+      const response = await fetch(STASH_URL, {
+        method: "POST", 
+        headers: getHeaders(), 
+        body: JSON.stringify({ query }),
+      });
+      const result = await response.json();
+      const items = result.data?.findStudios?.studios || [];
+      
+      allStudios = [...allStudios, ...items];
+      
+      if (items.length < perPage) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch (error) {
+      hasMore = false;
     }
-  `;
-  try {
-    const response = await fetch(STASH_URL, {
-      method: "POST", 
-      headers: getHeaders(), 
-      body: JSON.stringify({ query }),
-    });
-    const result = await response.json();
-    return result.data?.findStudios?.studios || [];
-  } catch (error) {
-    return [];
   }
+  return allStudios;
 }
 
 export async function fetchTags() {
-  const query = `
-    query {
-      findTags(filter: { per_page: -1 }) {
-        tags { id name scene_count }
+  let allTags = [];
+  let page = 1;
+  const perPage = 100;
+  let hasMore = true;
+
+  while (hasMore) {
+    const query = `
+      query {
+        findTags(filter: { page: ${page}, per_page: ${perPage} }) {
+          tags { id name scene_count }
+        }
       }
+    `;
+    try {
+      const response = await fetch(STASH_URL, {
+        method: "POST", 
+        headers: getHeaders(), 
+        body: JSON.stringify({ query }),
+      });
+      const result = await response.json();
+      const items = result.data?.findTags?.tags || [];
+      
+      allTags = [...allTags, ...items];
+      
+      if (items.length < perPage) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch (error) {
+      hasMore = false;
     }
-  `;
-  try {
-    const response = await fetch(STASH_URL, {
-      method: "POST", 
-      headers: getHeaders(), 
-      body: JSON.stringify({ query }),
-    });
-    const result = await response.json();
-    return result.data?.findTags?.tags || [];
-  } catch (error) {
-    return [];
   }
+  return allTags;
 }
 
 export async function fetchPerformers() {
-  const query = `
-    query {
-      findPerformers(filter: { per_page: -1 }) {
-        performers {
-          id
-          name
-          image_path
-          scene_count
+  let allPerformers = [];
+  let page = 1;
+  const perPage = 100;
+  let hasMore = true;
+
+  while (hasMore) {
+    const query = `
+      query {
+        findPerformers(filter: { page: ${page}, per_page: ${perPage} }) {
+          performers {
+            id
+            name
+            image_path
+            scene_count
+          }
         }
       }
+    `;
+    try {
+      const response = await fetch(STASH_URL, {
+        method: "POST", 
+        headers: getHeaders(), 
+        body: JSON.stringify({ query }),
+      });
+      const result = await response.json();
+      const items = result.data?.findPerformers?.performers || [];
+      
+      allPerformers = [...allPerformers, ...items];
+      
+      if (items.length < perPage) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch (error) {
+      hasMore = false;
     }
-  `;
-  try {
-    const response = await fetch(STASH_URL, {
-      method: "POST", 
-      headers: getHeaders(), 
-      body: JSON.stringify({ query }),
-    });
-    const result = await response.json();
-    return result.data?.findPerformers?.performers || [];
-  } catch (error) {
-    return [];
   }
+  return allPerformers;
 }

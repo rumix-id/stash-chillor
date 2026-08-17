@@ -1,4 +1,4 @@
-# 🎬 Stash-Chillor
+# 🎬 Stash-Chilorr
 
 Stash-Chilorr is a customized frontend built with React (Vite) and an automated background launcher for the Stash Server. This project revamps the default Stash UI using Tailwind CSS and includes scripts to package the entire application into a single, clean executable (`.exe`) file that runs silently in your taskbar.
 
@@ -24,14 +24,11 @@ Stash-Chilorr is a customized frontend built with React (Vite) and an automated 
 If you just want to run the application without messing with the source code, download the pre-compiled release:
 
 1. Navigate to the **[Releases](../../releases)** page of this repository.
-2. Download the latest `Stash-Chillor.zip` file.
+2. Download the latest `Stash-Chilorr-vX.X.zip` file.
 3. Extract the `.zip` file anywhere on your computer.
 4. Double-click **`Stash-Chillor.exe`** to launch the application.
 5. The server will run in the background (you will see an icon in your taskbar), and your default web browser will automatically open the application.
-6. **API Key Setup (First-Time Only):** 
-   * When the Stash interface opens for the first time, you may need to input your Stash API key. 
-   * If you haven't generated one yet, go to Stash **Settings > Security**, create/enable your API key, and configure it so the custom frontend can communicate with the backend smoothly.
-7. **To Stop:** Right-click the Stash icon in your taskbar and select **Close window**. The script will automatically terminate all related background processes safely.
+6. **To Stop:** Right-click the Stash icon in your taskbar and select **Close window**. The script will automatically terminate all related background processes safely.
 
 ---
 
@@ -45,7 +42,7 @@ If you just want to run the application without messing with the source code, do
 Clone this repository and install the required frontend dependencies:
 
 ```bash
-git clone https://github.com/rumix-id/stash-chillor.git
+git clone [https://github.com/your-username/stash-chilorr.git](https://github.com/your-username/stash-chilorr.git)
 cd stash-chilorr
 npm install
 ```

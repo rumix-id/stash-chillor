@@ -115,11 +115,13 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
                   <div 
                     key={img.id || index}
                     onClick={() => setPreviewIndex(index)}
-                    className="bg-[#141519] rounded-md overflow-hidden cursor-pointer group border border-neutral-800 hover:border-[#f47521] transition-all aspect-square relative shadow-md"
+                    className="bg-[#141519] rounded-md overflow-hidden cursor-pointer group border border-neutral-800 hover:border-[#f47521] transition-all aspect-square relative shadow-md select-none"
                   >
                     <img 
                       src={thumbUrl} 
-                      alt={img.title || "Gallery item"} 
+                      alt="" 
+                      draggable="false"
+                      onError={(e) => { e.currentTarget.style.opacity = 0; }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -152,7 +154,8 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
             <div className="relative max-w-5xl max-h-screen flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
               <img 
                 src={formatImageUrl(galleryImages[previewIndex]?.paths?.image || galleryImages[previewIndex]?.paths?.thumbnail)} 
-                alt="Preview Full" 
+                alt="" 
+                draggable="false"
                 className="max-w-full max-h-[90vh] object-contain rounded shadow-2xl mx-auto" 
               />
               <button 
@@ -201,12 +204,18 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
                   onSelectItem(item, type);
                 }
               }}
-              className="bg-[#141519] rounded-md p-4 border border-neutral-800 hover:border-[#f47521] transition-all cursor-pointer flex flex-col items-center text-center group shadow-md"
+              className="bg-[#141519] rounded-md p-4 border border-neutral-800 hover:border-[#f47521] transition-all cursor-pointer flex flex-col items-center text-center group shadow-md select-none"
             >
               {type === 'studio' && (
                 <div className="w-full h-32 rounded overflow-hidden bg-neutral-900 mb-3 border border-neutral-700 relative">
                   {imgUrl ? (
-                    <img src={imgUrl} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" />
+                    <img 
+                      src={imgUrl} 
+                      alt="" 
+                      draggable="false" 
+                      onError={(e) => { e.currentTarget.style.opacity = 0; }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" 
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">No Image</div>
                   )}
@@ -216,7 +225,13 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
               {type === 'performers' && (
                 <div className="w-full aspect-[3/4] rounded overflow-hidden bg-neutral-900 mb-3 border border-neutral-700 relative">
                   {imgUrl ? (
-                    <img src={imgUrl} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" />
+                    <img 
+                      src={imgUrl} 
+                      alt="" 
+                      draggable="false" 
+                      onError={(e) => { e.currentTarget.style.opacity = 0; }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" 
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">No Image</div>
                   )}
@@ -226,7 +241,13 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
               {type === 'gallery' && (
                 <div className="w-full aspect-[3/4] rounded overflow-hidden bg-neutral-900 mb-3 border border-neutral-700 relative">
                   {imgUrl ? (
-                    <img src={imgUrl} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" />
+                    <img 
+                      src={imgUrl} 
+                      alt="" 
+                      draggable="false" 
+                      onError={(e) => { e.currentTarget.style.opacity = 0; }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" 
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">No Image</div>
                   )}
