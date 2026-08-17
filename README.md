@@ -1,4 +1,4 @@
-# 🎬 Stash-Chilorr
+# 🎬 Stash-Chillor
 
 Stash-Chilorr is a customized frontend built with React (Vite) and an automated background launcher for the Stash Server. This project revamps the default Stash UI using Tailwind CSS and includes scripts to package the entire application into a single, clean executable (`.exe`) file that runs silently in your taskbar.
 
