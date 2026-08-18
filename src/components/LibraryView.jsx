@@ -185,7 +185,7 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
         {title}
       </h2>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-3">
         {safeItems.map((item) => {
           let rawImgUrl = item.image_path || item.paths?.cover || item.images?.[0]?.paths?.thumbnail || "";
           let imgUrl = formatImageUrl(rawImgUrl);
@@ -251,25 +251,25 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">No Image</div>
                   )}
-                  <div className="absolute bottom-2 right-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-white font-bold border border-neutral-700 shadow pointer-events-none">
-                    {item.image_count || 0} Photos
-                  </div>
                 </div>
               )}
 
-              {type === 'tag' && (
-                <div className="w-full h-20 rounded bg-neutral-900 mb-2 border border-neutral-700 flex items-center justify-center px-2">
-                  <span className="text-xl font-bold text-[#f47521] truncate w-full text-center">
-                    {displayName}
-                  </span>
-                </div>
-              )}
+{type === 'tag' ? (
+  <h3 className="text-[12px] font-semibold text-white truncate w-full group-hover:text-[#f47521] transition-colors" title={item.name}>
+    {item.name}
+  </h3>
+) : (
+  <h3 className="text-[10px] font-semibold text-white truncate w-full group-hover:text-[#f47521] transition-colors" title={displayName}>
+    {displayName}
+  </h3>
+)}
 
-              {type !== 'tag' && (
-                <h3 className="text-sm font-semibold text-white truncate w-full group-hover:text-[#f47521] transition-colors" title={displayName}>
-                  {displayName}
-                </h3>
-              )}
+{/* BAGIAN INI DIPINDAHKAN / DIUBAH KE SINI */}
+{type === 'gallery' ? (
+  <p className="text-[12px] text-gray-400 mt-0.5">
+    {item.image_count || 0} Photos
+  </p>
+) : null}
 
               {item.scene_count !== undefined && (
                 <p className="text-xs text-gray-400 mt-1">
