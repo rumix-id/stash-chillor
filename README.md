@@ -82,7 +82,13 @@ To create the final release version that end-users can run:
 ```text
 .
 ├── backend
-├── frontend
+│    ├── config.yml
+│    ├── stash-win.exe
+├── frontend (dist files)
+│    ├── assets
+│    ├── favicon.svg
+│    ├── icons.svg
+│    ├── index.html
 ├── icon.ico
 ├── server.js
 └── Stash-Chillor.bat
