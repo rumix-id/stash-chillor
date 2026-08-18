@@ -307,35 +307,35 @@ export default function VideoPlayer({ video, onClose }) {
           </div>
         </div>
 
-        {galleryImages.length > 0 && (
-          <div className="w-full max-w-6xl mt-6 text-left">
-            <span className="text-white font-semibold block mb-3 text-xs uppercase tracking-wider text-neutral-400">Gallery</span>
-            {loadingGalleryImages ? (
-              <p className="text-xs text-neutral-400">Loading gallery images...</p>
-            ) : (
-              <div className="flex gap-3 overflow-x-auto pb-3 orange-scrollbar">
-                {galleryImages.map((img, index) => {
-                  let rawThumbUrl = img.paths?.thumbnail || img.paths?.image || "";
-                  if (rawThumbUrl && !rawThumbUrl.startsWith('http')) {
-                    rawThumbUrl = `http://localhost:9999${rawThumbUrl}`;
-                  }
-                  const separator = rawThumbUrl.includes('?') ? '&' : '?';
-                  let thumbUrl = rawThumbUrl ? `${rawThumbUrl}${separator}apikey=${token}` : "";
+        <div className="w-full max-w-6xl mt-6 text-left">
+          <span className="text-white font-semibold block mb-3 text-xs uppercase tracking-wider text-neutral-400">Gallery</span>
+          {loadingGalleryImages ? (
+            <p className="text-xs text-neutral-400">Loading gallery images...</p>
+          ) : galleryImages.length > 0 ? (
+            <div className="flex gap-3 overflow-x-auto pb-3 orange-scrollbar">
+              {galleryImages.map((img, index) => {
+                let rawThumbUrl = img.paths?.thumbnail || img.paths?.image || "";
+                if (rawThumbUrl && !rawThumbUrl.startsWith('http')) {
+                  rawThumbUrl = `http://localhost:9999${rawThumbUrl}`;
+                }
+                const separator = rawThumbUrl.includes('?') ? '&' : '?';
+                let thumbUrl = rawThumbUrl ? `${rawThumbUrl}${separator}apikey=${token}` : "";
 
-                  return (
-                    <div 
-                      key={img.id} 
-                      onClick={() => setPreviewIndex(index)}
-                      className="flex-none w-28 h-28 bg-[#141519] rounded-lg overflow-hidden border border-neutral-800 hover:border-[#f47521] transition group shadow-md cursor-pointer relative"
-                    >
-                      <img src={thumbUrl} alt={img.title || "Gallery image"} className="w-full h-full object-cover group-hover:scale-105 transition" />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
+                return (
+                  <div 
+                    key={img.id} 
+                    onClick={() => setPreviewIndex(index)}
+                    className="flex-none w-28 h-28 bg-[#141519] rounded-lg overflow-hidden border border-neutral-800 hover:border-[#f47521] transition group shadow-md cursor-pointer relative"
+                  >
+                    <img src={thumbUrl} alt={img.title || "Gallery image"} className="w-full h-full object-cover group-hover:scale-105 transition" />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-xs text-neutral-500">No gallery images available for this video.</p>
+          )}
+        </div>
 
         <div className="w-full max-w-6xl mt-6 flex gap-6 text-sm text-left">
           
