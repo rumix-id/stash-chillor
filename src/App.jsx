@@ -76,7 +76,7 @@ export default function App() {
       try {
         setRecentVideos(JSON.parse(savedRecents));
       } catch (e) {
-        // Ignored
+        
       }
     }
 
@@ -114,6 +114,7 @@ export default function App() {
 
           return {
             id: Number(scene.id),
+            code: scene.code || "",
             title: scene.title || scene.code || (fileName ? fileName.replace(/\.[^/.]+$/, "") : `Scene ${scene.id}`),
             image: imgUrl,
             description: scene.details || "-",
@@ -180,6 +181,7 @@ export default function App() {
 
   const filteredVideos = videos.filter(video => 
     video.title.toLowerCase().includes(query) ||
+    (video.code || "").toLowerCase().includes(query) ||
     video.studio.toLowerCase().includes(query) ||
     video.tags.some(tag => tag.toLowerCase().includes(query)) ||
     video.performers.some(p => p.name.toLowerCase().includes(query))

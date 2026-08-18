@@ -21,6 +21,7 @@ export async function fetchScenes() {
           scenes {
             id
             title
+            code
             details
             date
             director
@@ -51,7 +52,6 @@ export async function fetchScenes() {
       
       allScenes = [...allScenes, ...items];
       
-      // Jika hasil yang didapat kurang dari 100, berarti ini halaman terakhir
       if (items.length < perPage) {
         hasMore = false;
       } else {

@@ -55,7 +55,7 @@ export default function Navbar({ searchQuery, setSearchQuery, activeTab, setActi
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={`Search ${activeTab === 'home' ? 'video' : activeTab}...`}
+            placeholder={`Search ${activeTab === 'home' ? 'video or code' : activeTab}...`}
             className="w-full bg-[#141519] border border-neutral-700 text-white text-sm rounded-full pl-10 pr-4 py-1.5 focus:outline-none focus:border-[#f47521] transition-all"
           />
           {searchQuery && (

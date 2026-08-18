@@ -15,6 +15,8 @@ export default function HeroBanner({ videos, onPlay }) {
   const currentVideo = heroVideos[currentIndex];
   if (!currentVideo) return null;
 
+  const displayCode = currentVideo.code || currentVideo.studio?.name || "UNKNOWN";
+
   return (
     <div className="relative w-full h-[70vh] min-h-[500px] flex items-center bg-[#0a0a0a] overflow-hidden select-none">
       
@@ -32,7 +34,7 @@ export default function HeroBanner({ videos, onPlay }) {
         <div className="md:col-span-7 flex flex-col justify-center overflow-hidden">
           
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight tracking-tight max-w-2xl drop-shadow-md truncate">
-            {currentVideo.title}
+            {displayCode}
           </h1>
           
           <div className="flex items-center gap-3 text-sm text-gray-300 mb-6 font-semibold">
@@ -43,7 +45,7 @@ export default function HeroBanner({ videos, onPlay }) {
           </div>
           
           <p className="text-[#c3c3c3] text-sm md:text-base mb-8 line-clamp-3 leading-relaxed max-w-xl drop-shadow">
-            {currentVideo.description}
+            {currentVideo.title}
           </p>
           
           <div className="flex gap-4">
