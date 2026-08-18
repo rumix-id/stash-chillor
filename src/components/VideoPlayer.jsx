@@ -149,6 +149,13 @@ export default function VideoPlayer({ video, onClose }) {
     setPreviewIndex((prev) => (prev < galleryImages.length - 1 ? prev + 1 : 0));
   };
 
+  // Fungsi baru untuk menutup saat klik diluar area
+  const handleOutsideClick = (e) => {
+    if (e.target.id === 'player-overlay' || e.target.id === 'player-wrapper') {
+      onClose();
+    }
+  };
+
   const progressStyle = {
     background: `linear-gradient(to right, #f47521 ${progress}%, #525252 ${progress}%)`
   };
@@ -180,7 +187,11 @@ export default function VideoPlayer({ video, onClose }) {
     : "-";
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/95 overflow-y-auto custom-scrollbar">
+    <div 
+      id="player-overlay"
+      className="fixed inset-0 z-50 bg-black/95 overflow-y-auto custom-scrollbar"
+      onClick={handleOutsideClick}
+    >
       
       <style>{`
         .orange-scrollbar::-webkit-scrollbar {
@@ -200,7 +211,10 @@ export default function VideoPlayer({ video, onClose }) {
         }
       `}</style>
 
-      <div className="min-h-full flex flex-col items-center px-4 pt-20 pb-12">
+      <div 
+        id="player-wrapper"
+        className="min-h-full flex flex-col items-center px-4 pt-20 pb-12"
+      >
         
         <div 
           className="w-full max-w-6xl relative"
@@ -307,35 +321,35 @@ export default function VideoPlayer({ video, onClose }) {
           </div>
         </div>
 
-        <div className="w-full max-w-6xl mt-6 text-left">
-          <span className="text-white font-semibold block mb-3 text-xs uppercase tracking-wider text-neutral-400">Gallery</span>
-          {loadingGalleryImages ? (
-            <p className="text-xs text-neutral-400">Loading gallery images...</p>
-          ) : galleryImages.length > 0 ? (
-            <div className="flex gap-3 overflow-x-auto pb-3 orange-scrollbar">
-              {galleryImages.map((img, index) => {
-                let rawThumbUrl = img.paths?.thumbnail || img.paths?.image || "";
-                if (rawThumbUrl && !rawThumbUrl.startsWith('http')) {
-                  rawThumbUrl = `http://localhost:9999${rawThumbUrl}`;
-                }
-                const separator = rawThumbUrl.includes('?') ? '&' : '?';
-                let thumbUrl = rawThumbUrl ? `${rawThumbUrl}${separator}apikey=${token}` : "";
+        {galleryImages.length > 0 && (
+          <div className="w-full max-w-6xl mt-6 text-left">
+            <span className="text-white font-semibold block mb-3 text-xs uppercase tracking-wider text-neutral-400">Gallery</span>
+            {loadingGalleryImages ? (
+              <p className="text-xs text-neutral-400">Loading gallery images...</p>
+            ) : (
+              <div className="flex gap-3 overflow-x-auto pb-3 orange-scrollbar">
+                {galleryImages.map((img, index) => {
+                  let rawThumbUrl = img.paths?.thumbnail || img.paths?.image || "";
+                  if (rawThumbUrl && !rawThumbUrl.startsWith('http')) {
+                    rawThumbUrl = `http://localhost:9999${rawThumbUrl}`;
+                  }
+                  const separator = rawThumbUrl.includes('?') ? '&' : '?';
+                  let thumbUrl = rawThumbUrl ? `${rawThumbUrl}${separator}apikey=${token}` : "";
 
-                return (
-                  <div 
-                    key={img.id} 
-                    onClick={() => setPreviewIndex(index)}
-                    className="flex-none w-28 h-28 bg-[#141519] rounded-lg overflow-hidden border border-neutral-800 hover:border-[#f47521] transition group shadow-md cursor-pointer relative"
-                  >
-                    <img src={thumbUrl} alt={img.title || "Gallery image"} className="w-full h-full object-cover group-hover:scale-105 transition" />
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="text-xs text-neutral-500">No gallery images available for this video.</p>
-          )}
-        </div>
+                  return (
+                    <div 
+                      key={img.id} 
+                      onClick={() => setPreviewIndex(index)}
+                      className="flex-none w-28 h-28 bg-[#141519] rounded-lg overflow-hidden border border-neutral-800 hover:border-[#f47521] transition group shadow-md cursor-pointer relative"
+                    >
+                      <img src={thumbUrl} alt={img.title || "Gallery image"} className="w-full h-full object-cover group-hover:scale-105 transition" />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="w-full max-w-6xl mt-6 flex gap-6 text-sm text-left">
           

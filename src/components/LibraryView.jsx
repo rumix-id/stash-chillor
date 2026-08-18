@@ -207,14 +207,14 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
               className="bg-[#141519] rounded-md p-4 border border-neutral-800 hover:border-[#f47521] transition-all cursor-pointer flex flex-col items-center text-center group shadow-md select-none"
             >
               {type === 'studio' && (
-                <div className="w-full h-32 rounded overflow-hidden bg-neutral-900 mb-3 border border-neutral-700 relative">
+                <div className="w-full aspect-[16/9] rounded overflow-hidden bg-neutral-900 mb-3 border border-neutral-700 relative flex items-center justify-center">
                   {imgUrl ? (
                     <img 
                       src={imgUrl} 
                       alt="" 
                       draggable="false" 
                       onError={(e) => { e.currentTarget.style.opacity = 0; }}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" 
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform pointer-events-none" 
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">No Image</div>
@@ -223,14 +223,14 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
               )}
 
               {type === 'performers' && (
-                <div className="w-full aspect-[3/4] rounded overflow-hidden bg-neutral-900 mb-3 border border-neutral-700 relative">
+                <div className="w-full aspect-[541/961] rounded overflow-hidden bg-neutral-900 mb-3 border border-neutral-700 relative flex items-center justify-center">
                   {imgUrl ? (
                     <img 
                       src={imgUrl} 
                       alt="" 
                       draggable="false" 
                       onError={(e) => { e.currentTarget.style.opacity = 0; }}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform pointer-events-none" 
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform pointer-events-none" 
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">No Image</div>
@@ -254,22 +254,21 @@ export default function LibraryView({ title = "Library", items = [], type = "", 
                 </div>
               )}
 
-{type === 'tag' ? (
-  <h3 className="text-[12px] font-semibold text-white truncate w-full group-hover:text-[#f47521] transition-colors" title={item.name}>
-    {item.name}
-  </h3>
-) : (
-  <h3 className="text-[10px] font-semibold text-white truncate w-full group-hover:text-[#f47521] transition-colors" title={displayName}>
-    {displayName}
-  </h3>
-)}
+              {type === 'tag' ? (
+                <h3 className="text-[12px] font-semibold text-white truncate w-full group-hover:text-[#f47521] transition-colors" title={item.name}>
+                  {item.name}
+                </h3>
+              ) : (
+                <h3 className="text-[10px] font-semibold text-white truncate w-full group-hover:text-[#f47521] transition-colors" title={displayName}>
+                  {displayName}
+                </h3>
+              )}
 
-{/* BAGIAN INI DIPINDAHKAN / DIUBAH KE SINI */}
-{type === 'gallery' ? (
-  <p className="text-[12px] text-gray-400 mt-0.5">
-    {item.image_count || 0} Photos
-  </p>
-) : null}
+              {type === 'gallery' ? (
+                <p className="text-[12px] text-gray-400 mt-0.5">
+                  {item.image_count || 0} Photos
+                </p>
+              ) : null}
 
               {item.scene_count !== undefined && (
                 <p className="text-xs text-gray-400 mt-1">

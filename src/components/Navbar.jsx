@@ -19,7 +19,7 @@ export default function Navbar({ searchQuery, setSearchQuery, activeTab, setActi
   };
 
   return (
-    <nav className="bg-[#23252b] h-[60px] w-full px-8 md:px-60 grid grid-cols-[auto_1fr] items-center gap-6 border-b border-[#141519] relative z-50">
+    <nav className="bg-[#23252b] h-[60px] w-full px-8 md:px-60 grid grid-cols-[auto_1fr] items-center gap-6 border-b border-[#141519] sticky top-0 z-50">
       
       <div className="flex items-center gap-10 md:gap-12">
         <div 
